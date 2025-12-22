@@ -2,39 +2,40 @@
 session_start();
 require_once "../model/connect.php";
 
-if (!isset($_POST['submit'])) {
+if(!isset($_POST['submit'])){
     header("Location: login.php");
     exit();
 }
 
-$username = trim($_POST['username'] ?? '');
-$password = trim($_POST['password'] ?? '');
+$username = trim($_POST['username']);
+$password = trim($_POST['password']);
 
-if (!$username || !$password) {
-    $_SESSION['error'] = "Vui lòng nhập đầy đủ thông tin!";
-    header("Location: login.php");
-    exit();
-}
-
-// Lấy user từ DB
-$stmt = $conn->prepare("SELECT id, username, password, role FROM users WHERE username = ?");
-$stmt->bind_param("s", $username);
+$stmt = $conn->prepare("SELECT id, username, password, role, is_locked FROM users WHERE username=? LIMIT 1");
+$stmt->bind_param("s",$username);
 $stmt->execute();
-$result = $stmt->get_result();
-$user = $result->fetch_assoc();
+$user = $stmt->get_result()->fetch_assoc();
 
-// So sánh trực tiếp (password thường)
-if (!$user || $password !== $user['password']) {
+if(!$user || $password !== $user['password']){
     $_SESSION['error'] = "Sai tài khoản hoặc mật khẩu!";
     header("Location: login.php");
     exit();
 }
 
-// Lưu session
+// Kiểm tra tài khoản bị khóa
+if ($user['is_locked']) {
+    $_SESSION['error'] = "Tài khoản này đã bị khóa! Vui lòng liên hệ quản trị viên.";
+    header("Location: login.php");
+    exit();
+}
+
 $_SESSION['user_id'] = $user['id'];
 $_SESSION['username'] = $user['username'];
-$_SESSION['role'] = $user['role'];
+$_SESSION['role'] = ((int)$user['role'] === 1)?'admin':'user';
 
-// Redirect sau login
-header("Location: ../index.php");
+// Điều hướng dựa trên vai trò
+if ($_SESSION['role'] === 'admin') {
+    header("Location: ../admin/index.php");
+} else {
+    header("Location: ../user/profile.php");
+}
 exit();

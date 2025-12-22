@@ -1,22 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slider</title>
-
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/animate.css">
-    <link rel="stylesheet" href="../css/style.css">
-</head>
-
-<body>
 <?php
 require_once('connect.php');
 error_reporting(2);
 ?>
 
-<div class="container slider-section wow zoomIn">
+<div class="slider-section wow zoomIn">
     <div id="myCarousel" class="carousel slide" data-ride="carousel">
 
         <!-- Indicators -->
@@ -39,11 +26,13 @@ error_reporting(2);
 
             while ($kq = mysqli_fetch_assoc($result)) {
                 $active = ($index == 0) ? "active" : "";
-                echo '
-                    <div class="item '.$active.'">
-                        <img src="./'.$kq['image'].'" alt="Slide" class="carousel-img">
+                ?>
+                <div class="item <?= $active ?>">
+                    <div class="slide-img">
+                        <img src="<?= htmlspecialchars($kq['image']) ?>" alt="Slide">
                     </div>
-                ';
+                </div>
+                <?php
                 $index++;
             }
             ?>
@@ -57,9 +46,6 @@ error_reporting(2);
         <a class="right carousel-control" href="#myCarousel" data-slide="next">
             <span class="glyphicon glyphicon-chevron-right"></span>
         </a>
+
     </div>
 </div>
-
-<script src="../js/mylishop.js"></script>
-</body>
-</html>

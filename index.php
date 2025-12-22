@@ -28,41 +28,37 @@ function getProducts($conn, $category, $limit = 12, $status = null) {
 function renderProduct($p) {
     $img = !empty($p['image']) ? $p['image'] : "images/no-image.png";
     ?>
-    <div class="col-md-3 col-sm-6 text-center">
-        <div class="thumbnail">
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="product-card">
 
-            <div class="hoverimage1">
-                <img src="<?= htmlspecialchars($img) ?>"
-                     class="img-responsive"
-                     style="width:100%; height:300px; object-fit:cover;">
+            <div class="product-image">
+                <img src="<?= htmlspecialchars($img) ?>" alt="<?= htmlspecialchars($p['name']) ?>">
             </div>
 
-            <div class="name-product">
-                <?= htmlspecialchars($p['name']) ?>
-            </div>
+            <div class="product-body">
+                <h4 class="product-name">
+                    <?= htmlspecialchars($p['name']) ?>
+                </h4>
 
-            <div class="price">
-                Giá: <?= number_format($p['price']) ?> đ
-            </div>
+                <div class="product-price">
+                    <?= number_format($p['price']) ?> đ
+                </div>
 
-            <div class="product-info">
-                <a href="addcart.php?id=<?= $p['id'] ?>">
-                    <button class="btn btn-primary">
-                        <span style="color:red;">❤</span> Mua hàng <span style="color:red;">❤</span>
-                    </button>
-                </a>
-
-                <a href="detail.php?id=<?= $p['id'] ?>">
-                    <button class="btn btn-primary">
-                        <span style="color:red;">❤</span> Chi tiết <span style="color:red;">❤</span>
-                    </button>
-                </a>
+                <div class="product-actions">
+                    <a href="addcart.php?id=<?= $p['id'] ?>" class="btn btn-buy">
+                        <i class="fa fa-shopping-cart"></i> Mua
+                    </a>
+                    <a href="detail.php?id=<?= $p['id'] ?>" class="btn btn-detail">
+                        Chi tiết
+                    </a>
+                </div>
             </div>
 
         </div>
     </div>
     <?php
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -84,8 +80,6 @@ function renderProduct($p) {
 </head>
 
 <body>
-
-<a href="#" class="back-to-top"><i class="fa fa-arrow-up"></i></a>
 
 <?php include "model/header.php"; ?>
 <?php include "model/slide.php"; ?>

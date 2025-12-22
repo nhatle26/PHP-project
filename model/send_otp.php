@@ -4,7 +4,8 @@ require '../vendor/autoload.php'; // đường dẫn đúng tới autoload.php
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-function sendOTP($email, $otp) {
+function sendOTP($email, $otp)
+{
     $mail = new PHPMailer(true);
     try {
         $mail->isSMTP();
@@ -18,9 +19,17 @@ function sendOTP($email, $otp) {
         $mail->setFrom('ShopLi@gmail.com', 'Website của bạn');
         $mail->addAddress($email);
 
+        $mail->CharSet = 'UTF-8';
+        $mail->Encoding = 'base64';
+
         $mail->isHTML(true);
         $mail->Subject = 'Mã OTP đăng ký';
-        $mail->Body = "Mã OTP của bạn là: <b>$otp</b> (hiệu lực 5 phút)";
+        $mail->Body = "
+    <p>Xin chào,</p>
+    <p>Mã OTP của bạn là: <b>$otp</b></p>
+    <p>OTP có hiệu lực trong <b>5 phút</b>.</p>
+";
+
 
         $mail->send();
         return true;

@@ -1,89 +1,96 @@
 <?php
 session_start();
-require_once '../model/connect.php';
-require_once 'header.php';
+require_once "../model/connect.php";
 
-// Kiểm tra login
-$role = $_SESSION['role'] ?? 0; // 1 = admin, 0 = user
-if (!isset($_SESSION['user_id'])) {
+// Kiểm tra đăng nhập và vai trò admin
+if (!isset($_SESSION['user_id']) || ($_SESSION['role'] ?? null) !== 'admin') {
     header("Location: ../user/login.php");
     exit();
 }
+require_once 'header.php';
 
 // Lấy thống kê
-$pr = $conn->query("SELECT COUNT(*) AS c FROM products")->fetch_assoc()['c'] ?? 0;
-$us = $conn->query("SELECT COUNT(*) AS c FROM users")->fetch_assoc()['c'] ?? 0;
-$or = $conn->query("SELECT COUNT(*) AS c FROM orders")->fetch_assoc()['c'] ?? 0;
+$stats_orders = $conn->query("SELECT COUNT(*) as total FROM orders")->fetch_assoc();
+$stats_revenue = $conn->query("SELECT SUM(total) as revenue FROM orders WHERE status = 1")->fetch_assoc();
+$stats_products = $conn->query("SELECT COUNT(*) as total FROM products")->fetch_assoc();
+$stats_users = $conn->query("SELECT COUNT(*) as total FROM users WHERE role = 0")->fetch_assoc();
+$stats_pending = $conn->query("SELECT COUNT(*) as total FROM orders WHERE status = 0")->fetch_assoc();
 
-// Lấy danh sách user
-$userList = $conn->query("SELECT id, username, role FROM users")->fetch_all(MYSQLI_ASSOC);
+// Lấy danh sách đơn hàng mới
+$orders=$conn->query("SELECT o.*, u.fullname FROM orders o JOIN users u ON o.user_id=u.id ORDER BY o.id DESC LIMIT 5");
 ?>
 
-<h1 class="h2">Bảng điều khiển</h1>
-<p class="mb-4">Tổng quan nhanh</p>
-
-<div class="row">
-    <div class="col-md-4">
-        <div class="card mb-4">
-            <div class="card-body">
-                <h5 class="card-title">Sản phẩm</h5>
-                <p class="card-text fs-3"><?= $pr ?></p>
-                <?php if($role == 1): ?>
-                    <a href="product-list.php" class="btn btn-primary btn-sm">Quản lý</a>
-                <?php endif; ?>
-            </div>
-        </div>
+<!-- Thống kê Dashboard -->
+<div class="row mb-4">
+  <div class="col-md-3">
+    <div class="card bg-primary text-white">
+      <div class="card-body">
+        <h5 class="card-title">Tổng đơn hàng</h5>
+        <h2><?= $stats_orders['total'] ?? 0 ?></h2>
+      </div>
     </div>
-    <div class="col-md-4">
-        <div class="card mb-4">
-            <div class="card-body">
-                <h5 class="card-title">Người dùng</h5>
-                <p class="card-text fs-3"><?= $us ?></p>
-                <a href="users.php" class="btn btn-primary btn-sm">Quản lý</a>
-            </div>
-        </div>
+  </div>
+  
+  <div class="col-md-3">
+    <div class="card bg-success text-white">
+      <div class="card-body">
+        <h5 class="card-title">Doanh thu</h5>
+        <h2><?= number_format($stats_revenue['revenue'] ?? 0) ?> ₫</h2>
+      </div>
     </div>
-    <div class="col-md-4">
-        <div class="card mb-4">
-            <div class="card-body">
-                <h5 class="card-title">Đơn hàng</h5>
-                <p class="card-text fs-3"><?= $or ?></p>
-                <?php if($role == 1): ?>
-                    <a href="orders.php" class="btn btn-primary btn-sm">Quản lý</a>
-                <?php endif; ?>
-            </div>
-        </div>
+  </div>
+  
+  <div class="col-md-3">
+    <div class="card bg-warning text-white">
+      <div class="card-body">
+        <h5 class="card-title">Đơn chờ xử lý</h5>
+        <h2><?= $stats_pending['total'] ?? 0 ?></h2>
+      </div>
     </div>
+  </div>
+  
+  <div class="col-md-3">
+    <div class="card bg-info text-white">
+      <div class="card-body">
+        <h5 class="card-title">Sản phẩm</h5>
+        <h2><?= $stats_products['total'] ?? 0 ?></h2>
+      </div>
+    </div>
+  </div>
 </div>
 
-<h3>Danh sách người dùng</h3>
-<table class="table table-bordered">
-    <thead>
+<!-- Danh sách đơn hàng mới -->
+<div class="card mt-4">
+  <div class="card-header bg-dark text-white">
+    <h5 class="mb-0">Đơn hàng gần đây</h5>
+  </div>
+  <div class="card-body">
+    <table class="table table-striped table-bordered align-middle">
+      <thead class="table-dark">
         <tr>
-            <th>#</th>
-            <th>Username</th>
-            <th>Role</th>
+          <th>#</th>
+          <th>Khách hàng</th>
+          <th>Tổng tiền</th>
+          <th>Ngày tạo</th>
+          <th>Trạng thái</th>
+          <th>Chi tiết</th>
         </tr>
-    </thead>
-    <tbody>
-        <?php foreach($userList as $i => $u): ?>
-            <tr>
-                <td><?= $i+1 ?></td>
-                <td>
-                    <?php if($role == 1): ?>
-                        <!-- Admin click username để quản lý user -->
-                        <a href="edit-user.php?id=<?= $u['id'] ?>"><?= htmlspecialchars($u['username']) ?></a>
-                    <?php else: ?>
-                        <!-- User chỉ vào profile của mình -->
-                        <a href="profile.php"><?= htmlspecialchars($u['username']) ?></a>
-                    <?php endif; ?>
-                </td>
-                <td><?= $u['role'] == 1 ? 'Admin' : 'User' ?></td>
-            </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
+      </thead>
+      <tbody>
+      <?php while($o=$orders->fetch_assoc()): ?>
+      <tr>
+        <td><?=$o['id']?></td>
+        <td><?=htmlspecialchars($o['fullname'])?></td>
+        <td><?=number_format($o['total'] ?? 0)?> ₫</td>
+        <td><?=$o['created_at'] ?? 'N/A'?></td>
+        <td><?=($o['status']==1?'<span class="badge bg-success">Hoàn thành</span>':($o['status']==0?'<span class="badge bg-warning">Chờ xử lý</span>':'<span class="badge bg-danger">Hủy</span>'))?></td>
+        <td><a href="view-order.php?id=<?=$o['id']?>" class="btn btn-sm btn-info">Xem</a></td>
+      </tr>
+      <?php endwhile; ?>
+      </tbody>
+    </table>
+    <a href="orders.php" class="btn btn-primary">Xem tất cả đơn hàng</a>
+  </div>
+</div>
 
-<?php
-require_once 'footer.php';
-?>
+<?php require_once 'footer.php'; ?>

@@ -4,6 +4,7 @@ require_once "model/connect.php";
 
 if (isset($_GET['id'])) {
     $id = (int)$_GET['id'];
+    $qty = isset($_GET['qty']) ? max(1, (int)$_GET['qty']) : 1;
 
     // Lấy thông tin sản phẩm
     $stmt = $conn->prepare("SELECT id, name, price, image FROM products WHERE id=?");
@@ -14,14 +15,14 @@ if (isset($_GET['id'])) {
     if ($product) {
         // Nếu sản phẩm đã có trong giỏ, tăng số lượng
         if (isset($_SESSION['cart'][$id])) {
-            $_SESSION['cart'][$id]['quantity'] += 1;
+            $_SESSION['cart'][$id]['quantity'] += $qty;
         } else {
             $_SESSION['cart'][$id] = [
                 'id' => $product['id'],
                 'name' => $product['name'],
                 'price' => $product['price'],
                 'image' => $product['image'],
-                'quantity' => 1
+                'quantity' => $qty
             ];
         }
     }
