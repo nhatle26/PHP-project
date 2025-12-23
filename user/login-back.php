@@ -36,6 +36,6 @@ $_SESSION['role'] = ((int)$user['role'] === 1)?'admin':'user';
 if ($_SESSION['role'] === 'admin') {
     header("Location: ../admin/index.php");
 } else {
-    header("Location: ../user/profile.php");
+    header("Location: ../index.php");
 }
 exit();

@@ -41,9 +41,9 @@ $stmt->bind_param("ii", $is_locked, $user_id);
 
 if ($stmt->execute()) {
     if ($action === 'lock') {
-        $_SESSION['success'] = "✓ Tài khoản đã bị khóa!";
+        $_SESSION['success'] = "Tài khoản đã bị khóa!";
     } else {
-        $_SESSION['success'] = "✓ Tài khoản đã được mở khóa!";
+        $_SESSION['success'] = "Tài khoản đã được mở khóa!";
     }
 } else {
     $_SESSION['error'] = "Lỗi cập nhật trạng thái!";

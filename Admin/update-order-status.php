@@ -32,9 +32,9 @@ $stmt->bind_param("ii", $status, $order_id);
 if ($stmt->execute()) {
     // Thông báo theo trạng thái
     if ($status == 1) {
-        $_SESSION['success'] = "✓ Đơn hàng đã được duyệt!";
+        $_SESSION['success'] = "Đơn hàng đã được duyệt!";
     } elseif ($status == 2) {
-        $_SESSION['success'] = "✗ Đơn hàng đã bị từ chối!";
+        $_SESSION['success'] = "Đơn hàng đã bị từ chối!";
     } else {
         $_SESSION['success'] = "Trạng thái đã cập nhật!";
     }

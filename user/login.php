@@ -38,7 +38,7 @@
                     <input type="password" name="password" placeholder="Mật khẩu" required>
                 </div>
 
-                <!-- 🔹 QUÊN MẬT KHẨU -->
+                <!-- QUÊN MẬT KHẨU -->
                 <div class="forgot-password">
                     <a href="forgot-password.php">
                         <i class="fa fa-key"></i> Quên mật khẩu?

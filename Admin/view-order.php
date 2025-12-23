@@ -135,13 +135,13 @@ if (isset($_SESSION['error'])) {
     <form method="POST" action="update-order-status.php" style="display:inline;">
         <input type="hidden" name="order_id" value="<?= $orderId ?>">
         <input type="hidden" name="status" value="1">
-        <button type="submit" class="btn btn-success btn-lg">✓ Đồng ý</button>
+        <button type="submit" class="btn btn-success btn-lg">Đồng ý</button>
     </form>
     
     <form method="POST" action="update-order-status.php" style="display:inline;">
         <input type="hidden" name="order_id" value="<?= $orderId ?>">
         <input type="hidden" name="status" value="2">
-        <button type="submit" class="btn btn-danger btn-lg" onclick="return confirm('Bạn chắc chắn từ chối đơn hàng này?');">✗ Từ chối</button>
+        <button type="submit" class="btn btn-danger btn-lg" onclick="return confirm('Bạn chắc chắn từ chối đơn hàng này?');">Từ chối</button>
     </form>
 </div>
 <?php else: ?>

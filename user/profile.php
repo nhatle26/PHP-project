@@ -40,26 +40,7 @@ $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $user = $stmt->get_result()->fetch_assoc();
 
-// Lấy sản phẩm nổi bật
-$products = $conn->query("SELECT id, image, name, price FROM products LIMIT 8");
-
-// Hàm render sản phẩm
-function renderProduct($p){
-    $img = !empty($p['image']) ? $p['image'] : "../images/no-image.png"; ?>
-    <div class="col-md-3 col-sm-6 col-xs-12">
-        <div class="product-card">
-            <div class="product-image"><img src="<?= htmlspecialchars($img) ?>" alt="<?= htmlspecialchars($p['name']) ?>"></div>
-            <div class="product-body">
-                <h4 class="product-name"><?= htmlspecialchars($p['name']) ?></h4>
-                <div class="product-price"><?= number_format($p['price']) ?> đ</div>
-                <div class="product-actions">
-                    <a href="../addcart.php?id=<?= $p['id'] ?>" class="btn btn-buy"><i class="fa fa-shopping-cart"></i> Mua</a>
-                    <a href="../detail.php?id=<?= $p['id'] ?>" class="btn btn-detail">Chi tiết</a>
-                </div>
-            </div>
-        </div>
-    </div>
-<?php } ?>
+?>
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -75,33 +56,43 @@ function renderProduct($p){
 <?php include "../model/header.php"; ?>
 
 <div class="container" style="margin-top: 20px;">
-    <div style="margin-bottom: 20px;">
-        <a href="<?= ($role==='admin')?$base.'/admin/index.php':$base.'/index.php' ?>" class="btn btn-primary"><i class="fa fa-home"></i> Về trang chủ</a>
-    </div>
-
     <?php if (!empty($error_msg)) echo '<div class="alert alert-danger">'.htmlspecialchars($error_msg).'</div>'; ?>
     <?php if (!empty($_GET['success'])) echo '<div class="alert alert-success">Cập nhật thông tin thành công!</div>'; ?>
 
+    <div style="text-align: center; margin-bottom: 30px;">
+        <h3 style="display: inline-block; font-size: 28px; color: #333; background: #fbdd12; padding: 15px 25px; border-radius: 6px;"><i class="fa fa-user-circle"></i> Thông tin cá nhân</h3>
+    </div>
+    
     <div class="profile-main">
-        <h3 class="section-title">Thông tin cá nhân</h3>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="profile-card">
-                    <form action="" method="post">
-                        <p><strong>Họ và tên:</strong><input type="text" name="fullname" value="<?= htmlspecialchars($user['fullname']) ?>" class="form-control"></p>
-                        <p><strong>Email:</strong><input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" class="form-control"></p>
-                        <p><strong>Số điện thoại:</strong><input type="text" name="phone" value="<?= htmlspecialchars($user['phone']) ?>" class="form-control"></p>
-                        <p><strong>Địa chỉ:</strong><input type="text" name="address" value="<?= htmlspecialchars($user['address']) ?>" class="form-control"></p>
-                        <button type="submit" name="update_profile" class="btn btn-success">Lưu thay đổi</button>
-                    </form>
+        <div class="profile-card" style="max-width: 550px; margin: 0 auto;">
+            <form action="" method="post">
+                <div class="form-group">
+                    <label><strong>Họ và tên</strong></label>
+                    <input type="text" name="fullname" value="<?= htmlspecialchars($user['fullname']) ?>" class="form-control" required>
                 </div>
-            </div>
-
-            <div class="col-md-8">
-                <h4>Sản phẩm nổi bật</h4>
-                <div class="row">
-                    <?php while ($p = $products->fetch_assoc()) renderProduct($p); ?>
+                
+                <div class="form-group">
+                    <label><strong>Email</strong></label>
+                    <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" class="form-control" required>
                 </div>
+                
+                <div class="form-group">
+                    <label><strong>Số điện thoại</strong></label>
+                    <input type="text" name="phone" value="<?= htmlspecialchars($user['phone']) ?>" class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <label><strong>Địa chỉ</strong></label>
+                    <input type="text" name="address" value="<?= htmlspecialchars($user['address']) ?>" class="form-control">
+                </div>
+                
+                <div style="margin-top: 30px; text-align: center;">
+                    <button type="submit" name="update_profile" class="btn btn-success btn-lg" style="width: 200px;"><i class="fa fa-save"></i> Lưu thay đổi</button>
+                </div>
+            </form>
+            
+            <div style="margin-top: 20px; text-align: center; border-top: 1px solid #ddd; padding-top: 20px;">
+                <a href="<?= ($role==='admin')?$base.'/admin/index.php':$base.'/index.php' ?>" class="btn btn-secondary"><i class="fa fa-home"></i> Về trang chủ</a>
             </div>
         </div>
     </div>

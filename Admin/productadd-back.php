@@ -2,8 +2,7 @@
 // admin/productadd-back.php
 session_start();
 require_once '../model/connect.php';
-require_once 'auth.php';
-requireAdmin();
+require_once '../model/auth.php';
 
 if (!isset($_POST['addProduct'])) {
     header("Location: product-add.php");

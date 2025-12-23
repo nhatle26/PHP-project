@@ -46,9 +46,9 @@ if (isset($_SESSION['error'])) {
         <td><?= $row['role'] ? '<span class="badge bg-danger">Admin</span>' : '<span class="badge bg-info">User</span>' ?></td>
         <td>
           <?php if ($row['is_locked']): ?>
-            <span class="badge bg-secondary">🔒 Khóa</span>
+            <span class="badge bg-secondary">Khóa</span>
           <?php else: ?>
-            <span class="badge bg-success">🔓 Hoạt động</span>
+            <span class="badge bg-success">Hoạt động</span>
           <?php endif; ?>
         </td>
         <td>
@@ -60,9 +60,6 @@ if (isset($_SESSION['error'])) {
               <button type="submit" name="action" value="lock" class="btn btn-sm btn-warning" onclick="return confirm('Khóa tài khoản này?');">Khóa</button>
             <?php endif; ?>
           </form>
-          <a href="edit-user.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-primary">Sửa</a>
-          <a href="delete-user.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-danger"
-             onclick="return confirm('Bạn chắc chắn muốn xóa người dùng này?');">Xóa</a>
         </td>
       </tr>
     <?php endwhile; ?>

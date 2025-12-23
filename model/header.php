@@ -39,5 +39,12 @@ $cart_count = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
             </a>
 
         </div>
+        <!-- SEARCH -->
+        <div class="header-search">
+            <form action="<?= $base ?>/search.php" method="get" class="search-form">
+                <input type="search" name="q" placeholder="Tìm sản phẩm..." value="<?= htmlspecialchars($_GET['q'] ?? '') ?>" class="search-input">
+                <button type="submit" class="search-btn"><i class="fa fa-search"></i></button>
+            </form>
+        </div>
     </div>
 </header>

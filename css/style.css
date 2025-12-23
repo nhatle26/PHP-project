@@ -22,6 +22,35 @@ body {
     --gray: #666;
 }
 
+/* Header search styles */
+.header-search {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 20px;
+}
+.search-form {
+    display: flex;
+    align-items: center;
+}
+.search-input {
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px 0 0 4px;
+    min-width: 220px;
+}
+.search-btn {
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-left: 0;
+    background: #fff;
+    border-radius: 0 4px 4px 0;
+}
+
+@media (max-width: 768px) {
+    .header-search { display: block; margin: 10px 0; }
+    .search-input { min-width: 120px; }
+}
+
 /* ================= HEADER TOP ================= */
 .header_top {
     background: linear-gradient(90deg, #ff4b4b, #ff0000);
@@ -386,23 +415,27 @@ footer {
 
 .product-card {
     background: #fff;
-    border-radius: 6px;
+    border-radius: 8px;
     overflow: hidden;
     margin-bottom: 25px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    transition: 0.3s ease;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08), 0 4px 24px rgba(0,0,0,0.05);
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+    border: 1px solid #f0f0f0;
 }
 
 .product-card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15), 0 12px 40px rgba(0,0,0,0.1);
 }
 
 /* KHUNG ẢNH CỐ ĐỊNH */
 .product-image {
     width: 100%;
-    height: 280px;          /* QUYẾT ĐỊNH ĐỒNG BỘ */
+    height: 320px;          /* TĂNG CHIỀU CAO */
     overflow: hidden;
-    background: #f5f5f5;
+    background: linear-gradient(135deg, #f5f5f5, #ffffff);
+    border-bottom: 1px solid #efefef;
+    position: relative;
 }
 
 /* ÉP ẢNH */
@@ -411,34 +444,41 @@ footer {
     height: 100%;
     object-fit: cover;      /* CẮT VIỀN, KHÔNG MÉO */
     display: block;
-    transition: 0.4s ease;
+    transition: transform 0.5s cubic-bezier(0.23, 1, 0.320, 1);
 }
 
 .product-card:hover .product-image img {
-    transform: scale(1.06);
+    transform: scale(1.1) rotate(0.5deg);
 }
 
 /* BODY */
 .product-body {
-    padding: 15px;
+    padding: 18px 15px;
     text-align: center;
+    background: #fff;
 }
 
 .product-name {
-    font-size: 15px;
-    height: 42px;           /* KHÓA CHIỀU CAO TÊN */
+    font-size: 16px;
+    font-weight: 500;
+    height: 45px;           /* KHÓA CHIỀU CAO TÊN */
     overflow: hidden;
+    line-height: 1.4;
+    color: #333;
+    margin: 0 0 10px 0;
 }
 
 .product-price {
     color: #e91e63;
     font-weight: 700;
-    margin: 8px 0;
+    font-size: 18px;
+    margin: 10px 0;
 }
 
 .product-actions .btn {
     font-size: 13px;
-    padding: 6px 10px;
+    padding: 8px 12px;
+    margin: 5px 3px;
 }
 /* ================= FIX SLIDER KHÔNG ĐẨY NỘI DUNG ================= */
 

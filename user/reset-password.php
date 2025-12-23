@@ -17,13 +17,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // ❌ BỎ password_hash
-    // $hash = password_hash($pass1, PASSWORD_DEFAULT);
-
     $stmt = $conn->prepare(
         "UPDATE users SET password = ? WHERE email = ?"
     );
-    // ✅ truyền ĐÚNG 2 biến
+    // truyền ĐÚNG 2 biến
     $stmt->bind_param("ss", $pass1, $_SESSION['reset_email']);
     $stmt->execute();
 

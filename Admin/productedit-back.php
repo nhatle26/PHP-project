@@ -2,8 +2,7 @@
 // admin/productedit-back.php
 session_start();
 require_once '../model/connect.php';
-require_once 'auth.php';
-requireAdmin();
+require_once '../model/auth.php';
 
 $id = intval($_GET['idProduct'] ?? 0);
 if ($id <= 0) {
